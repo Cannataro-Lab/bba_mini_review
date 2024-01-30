@@ -1,5 +1,6 @@
 ## Main analysis script ----- 
 
+library(cancereffectsizeR)
 
 
 # download the data ----- 
@@ -19,5 +20,13 @@ source("R/load_cesR_analyses.R")
 
 
 # Run attributions analyses ----- 
+source("R/attributions_calculations.R")
+
+
+
+
+
+
+
 
 
