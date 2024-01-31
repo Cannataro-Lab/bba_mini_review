@@ -3,7 +3,7 @@ library(plotly)
 
 
 # dataset_name of the form luad_cesa, lusc_cesa etc.
-tcga_to_bar_plot <- function(dataset_name, sample){
+tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL){
   
   dataset <- get(dataset_name)
   
@@ -70,16 +70,41 @@ tcga_to_bar_plot <- function(dataset_name, sample){
   
   attr_sigs$Type <- factor(attr_sigs$Type, levels = trinuc_order) 
   
+  attr_sigs$Signatures <- factor(attr_sigs$Signatures, levels = signatures$Signatures)
   
-  attr_plot <- ggplot(attr_sigs) +
-    geom_bar(aes(x=Type, y=absolute_signature, fill = Signatures), stat = "identity", position = "stack") +
+  
+  
+  if(!is.null(highlight_context)){
+    
+    # highlight_context <- c("T[C>T]A")
+    # attr_sigs$bordered <- NA
+    attr_sigs <- attr_sigs |> 
+      mutate(bordered = case_when(as.character(Type) %in% highlight_context ~ "highlight", 
+             TRUE ~ "no"))
+    
+    
+    attr_plot <- ggplot(attr_sigs)   
+    attr_plot <- attr_plot + 
+      geom_bar(aes(x=Type, 
+                   y=absolute_signature, 
+                   fill = Signatures,color=bordered), stat = "identity", position = "stack") + 
+      scale_color_manual(values = c("black","white")) + 
+      guides(colour = "none")
+    
+  }else{
+    
+    attr_plot <- ggplot(attr_sigs) 
+    attr_plot <- attr_plot + 
+      geom_bar(aes(x=Type, y=absolute_signature, fill = Signatures), stat = "identity", position = "stack") 
+    
+  }
+  
+  attr_plot <- attr_plot + 
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 90)) + 
     labs(y="Number of substitutions", x="Trinucleotide context") + 
     theme(legend.position=c(.9,.75)) + 
-    scale_fill_manual(values = color_vec_sbs)
-  
-  
+    scale_fill_manual(values = color_vec_sbs) 
   
   # percent each sig plots
   
