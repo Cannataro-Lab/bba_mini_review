@@ -71,7 +71,7 @@ tcga_to_bar_plot <- function(dataset_name, sample){
   attr_sigs$Type <- factor(attr_sigs$Type, levels = trinuc_order) 
   
   
-  ggplot(attr_sigs) +
+  attr_plot <- ggplot(attr_sigs) +
     geom_bar(aes(x=Type, y=absolute_signature, fill = Signatures), stat = "identity", position = "stack") +
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 90)) + 
@@ -81,7 +81,8 @@ tcga_to_bar_plot <- function(dataset_name, sample){
   
   return(
     list(
-      original_subs_plot = original_subs
+      original_subs_plot = original_subs,
+      attr_plot = attr_plot
     )
   )
   
