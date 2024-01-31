@@ -7,11 +7,49 @@ tcga_to_bar_plot <- function(dataset_name, sample){
   
   dataset <- get(dataset_name)
   
-  signatures <- read.table("COSMIC_v3.4_SBS_GRCh37.txt", header = TRUE)
-  signatures_longer <- signatures %>%
-    pivot_longer(cols = starts_with("SBS"), names_to = "Signatures", values_to = "raw_signature")
+  trinuc_order <- colnames(ces.refset.hg38::ces.refset.hg38$signatures$COSMIC_v3.2$signatures)
   
-  sample_example <- dataset@trinucleotide_mutation_weights[["raw_signature_weights"]] %>%
+  # signatures <- read.table("COSMIC_v3.4_SBS_GRCh37.txt", header = TRUE)
+  signatures <- ces.refset.hg38::ces.refset.hg38$signatures$COSMIC_v3.2$signatures
+  signatures <- signatures |> mutate(Signatures = rownames(signatures))
+  
+  signatures_longer <- signatures %>%
+    pivot_longer(cols = -"Signatures", values_to = "raw_signature",names_to = "Type")
+  
+  
+  trinuc_counts_samples <- dataset@trinucleotide_mutation_weights$trinuc_snv_counts
+  
+  count_types <- rownames(trinuc_counts_samples )
+  
+  trinuc_counts_samples <- as.data.frame(trinuc_counts_samples)
+  trinuc_counts_samples$Type <- count_types
+  
+  trinuc_counts_samples_long <- trinuc_counts_samples |> 
+    pivot_longer(cols = -Type, names_to = "Sample",values_to = "Number of substitutions")
+  
+  trinuc_counts_samples_long$Type <- factor(trinuc_counts_samples_long$Type, levels = trinuc_order) 
+  
+  original_subs <- trinuc_counts_samples_long |> 
+    filter(Sample == sample) |> 
+    ggplot(aes(x=Type, y=`Number of substitutions`)) + 
+    geom_col() + 
+    theme_bw() + 
+    theme(axis.text.x = element_text(angle = 90)) + 
+    labs(x="Trinucleotide context")
+  
+  
+  
+  sample_sbs_prop <- dataset$mutational_signatures$biological_weights |> 
+    filter(Unique_Patient_Identifier == sample) |> 
+    select(Unique_Patient_Identifier, starts_with("SBS")) |> 
+    pivot_longer(-Unique_Patient_Identifier, names_to = "Signature",values_to = "Proportion") |> 
+    filter(Proportion > 0)
+  
+  
+  # sample_sbs_prop
+  
+  
+  sample_example <- dataset$mutational_signatures$raw_attributions %>%
     filter(Unique_Patient_Identifier == sample) %>%
     pivot_longer(cols = starts_with("SBS"), names_to = "Signatures", values_to = "raw_signature_weights")
   
@@ -19,14 +57,32 @@ tcga_to_bar_plot <- function(dataset_name, sample){
     right_join(sample_example, by = "Signatures") %>%
     mutate(absolute_signature = raw_signature*raw_signature_weights) %>%
     group_by(Type) %>%
-    summarize(sum = sum(absolute_signature)) %>%
-    slice_max(sum, n = 10)
+    summarize(sum = sum(absolute_signature))
   
-  signatures_longer %>%
+  # %>%
+  #   slice_max(sum, n = 10)
+  # 
+  attr_sigs <- signatures_longer %>%
     right_join(sample_example, by = "Signatures") %>%
     mutate(absolute_signature = raw_signature*raw_signature_weights) %>%
     filter(Type %in% sample_highest_sigs$Type) %>%
-    ggplot() +
+    filter(absolute_signature >0) 
+  
+  attr_sigs$Type <- factor(attr_sigs$Type, levels = trinuc_order) 
+  
+  
+  ggplot(attr_sigs) +
     geom_bar(aes(x=Type, y=absolute_signature, fill = Signatures), stat = "identity", position = "stack") +
-    labs(x="Number of substitutions", y="Trinucleotide context")
+    theme_bw() + 
+    theme(axis.text.x = element_text(angle = 90)) + 
+    labs(y="Number of substitutions", x="Trinucleotide context") + 
+    theme(legend.position=c(.9,.75))
+  
+  
+  return(
+    list(
+      original_subs_plot = original_subs
+    )
+  )
+  
 }
