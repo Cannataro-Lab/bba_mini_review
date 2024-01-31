@@ -76,13 +76,50 @@ tcga_to_bar_plot <- function(dataset_name, sample){
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 90)) + 
     labs(y="Number of substitutions", x="Trinucleotide context") + 
-    theme(legend.position=c(.9,.75))
+    theme(legend.position=c(.9,.75)) + 
+    scale_fill_manual(values = color_vec_sbs)
+  
+  
+  
+  # percent each sig plots
+  
+  sbs_plots <- vector(mode = "list",length = nrow(sample_sbs_prop))
+
+  names(sbs_plots) <- sample_sbs_prop$Signature
+  
+  for(this_sbs_ind in 1:length(sbs_plots)){
+    
+    
+  this_sbs <- sample_sbs_prop[this_sbs_ind,"Signature"] |> pull()
+  this_prop <- sample_sbs_prop[this_sbs_ind,"Proportion"] |> pull()
+  
+  this_sig_dist <- signatures_longer |> 
+    filter(Signatures == this_sbs)
+  
+  
+  this_sig_dist$Type <- factor(this_sig_dist$Type, levels = trinuc_order) 
+  
+  
+ 
+   sbs_ggplot <- ggplot(this_sig_dist) +
+    geom_col(aes(x=Type, y=raw_signature), fill = color_vec_sbs[this_sbs]) +
+    theme_bw() + 
+    theme(axis.text.x = element_text(angle = 90)) + 
+    labs(y="Number of substitutions", x="Trinucleotide context",
+         title = this_sbs,
+         subtitle = paste("Proportion signature attributed:", round(this_prop,3)))+ 
+    theme(legend.position="none") 
+   
+   sbs_plots[[this_sbs_ind]] <- sbs_ggplot
+  
+  }
   
   
   return(
     list(
       original_subs_plot = original_subs,
-      attr_plot = attr_plot
+      attr_plot = attr_plot,
+      sbs_plots = sbs_plots
     )
   )
   
