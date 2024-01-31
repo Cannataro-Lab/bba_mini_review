@@ -3,7 +3,7 @@ library(plotly)
 
 
 # dataset_name of the form luad_cesa, lusc_cesa etc.
-tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL){
+tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL,subs_to_plot=c("C>A","C>G","C>T")){
   
   dataset <- get(dataset_name)
   
@@ -28,8 +28,21 @@ tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL){
     pivot_longer(cols = -Type, names_to = "Sample",values_to = "Number of substitutions")
   
   trinuc_counts_samples_long$Type <- factor(trinuc_counts_samples_long$Type, levels = trinuc_order) 
+
+  to_keep <- NULL
   
-  original_subs <- trinuc_counts_samples_long |> 
+  for(sub_ind in 1:length(subs_to_plot)){
+    to_keep <- c(to_keep, which(stringr::str_detect(pattern = subs_to_plot[sub_ind],
+                                              string = trinuc_counts_samples_long$Type)))
+    
+  }
+  
+    
+  trinuc_counts_samples_long_for_plot <- trinuc_counts_samples_long[unique(to_keep),]
+    
+  
+  
+  original_subs <- trinuc_counts_samples_long_for_plot |> 
     filter(Sample == sample) |> 
     ggplot(aes(x=Type, y=`Number of substitutions`)) + 
     geom_col() + 
@@ -72,18 +85,27 @@ tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL){
   
   attr_sigs$Signatures <- factor(attr_sigs$Signatures, levels = signatures$Signatures)
   
+  to_keep <- NULL
+  
+  for(sub_ind in 1:length(subs_to_plot)){
+    to_keep <- c(to_keep, which(stringr::str_detect(pattern = subs_to_plot[sub_ind],
+                                                    string = attr_sigs$Type)))
+    
+  }
+  
+  attr_sigs_for_plot <- attr_sigs[unique(to_keep),]
   
   
   if(!is.null(highlight_context)){
     
     # highlight_context <- c("T[C>T]A")
     # attr_sigs$bordered <- NA
-    attr_sigs <- attr_sigs |> 
+    attr_sigs_for_plot <- attr_sigs_for_plot |> 
       mutate(bordered = case_when(as.character(Type) %in% highlight_context ~ "highlight", 
              TRUE ~ "no"))
     
     
-    attr_plot <- ggplot(attr_sigs)   
+    attr_plot <- ggplot(attr_sigs_for_plot)   
     attr_plot <- attr_plot + 
       geom_bar(aes(x=Type, 
                    y=absolute_signature, 
@@ -93,7 +115,7 @@ tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL){
     
   }else{
     
-    attr_plot <- ggplot(attr_sigs) 
+    attr_plot <- ggplot(attr_sigs_for_plot) 
     attr_plot <- attr_plot + 
       geom_bar(aes(x=Type, y=absolute_signature, fill = Signatures), stat = "identity", position = "stack") 
     
@@ -121,6 +143,15 @@ tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL){
   this_sig_dist <- signatures_longer |> 
     filter(Signatures == this_sbs)
   
+  to_keep <- NULL
+  
+  for(sub_ind in 1:length(subs_to_plot)){
+    to_keep <- c(to_keep, which(stringr::str_detect(pattern = subs_to_plot[sub_ind],
+                                                    string = this_sig_dist$Type)))
+    
+  }
+  
+  this_sig_dist <- this_sig_dist[unique(to_keep),]
   
   this_sig_dist$Type <- factor(this_sig_dist$Type, levels = trinuc_order) 
   
