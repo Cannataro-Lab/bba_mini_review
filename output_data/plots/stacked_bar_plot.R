@@ -47,7 +47,7 @@ tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL,subs_t
     ggplot(aes(x=Type, y=`Number of substitutions`)) + 
     geom_col() + 
     theme_bw() + 
-    theme(axis.text.x = element_text(angle = 90)) + 
+    theme(axis.text.x = element_text(angle = 90,hjust=1,vjust=0.5)) + 
     labs(x="Trinucleotide context")
   
   
@@ -123,7 +123,7 @@ tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL,subs_t
   
   attr_plot <- attr_plot + 
     theme_bw() + 
-    theme(axis.text.x = element_text(angle = 90)) + 
+    theme(axis.text.x = element_text(angle = 90,hjust=1,vjust=0.5)) + 
     labs(y="Number of substitutions", x="Trinucleotide context") + 
     theme(legend.position=c(.15,.95)) + 
     scale_fill_manual(values = color_vec_sbs) 
@@ -169,7 +169,7 @@ tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL,subs_t
    sbs_ggplot <- ggplot(this_sig_dist) +
     geom_col(aes(x=Type, y=raw_signature), fill = color_vec_sbs[this_sbs]) +
     theme_bw() + 
-    theme(axis.text.x = element_text(angle = 90)) + 
+    theme(axis.text.x = element_text(angle = 90,hjust=1,vjust=0.5)) +
     labs(y="Proportion", x="Trinucleotide context",
          title = this_sbs,
          subtitle = paste("Proportion signature attributed:", round(this_prop,3)))+ 
