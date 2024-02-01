@@ -84,6 +84,7 @@ sources_of_variants <- function(cesa_dataset_name, cesa_attr,
     theme_bw() + 
     theme(axis.text.x = element_text(angle=90)) + 
     scale_fill_manual(values = color_vec) + 
+    theme(axis.text.x = element_text(angle = 90,hjust=1,vjust=0.5)) + 
     labs(y="Number of substitutions",x="Variant", fill = "Signature process")
   
   
@@ -113,5 +114,23 @@ sources_of_variants(cesa_dataset_name = "thca_cesa",cesa_attr = thca_attr)
 
 
 sources_of_variants(cesa_dataset_name = "lihc_cesa",cesa_attr = lihc_attr)
+
+
+
+
+luad_attr_plot <- sources_of_variants(cesa_dataset_name = "luad_cesa",
+                    cesa_attr = luad_attr,selection_top = 12,
+                    prev_cutoff = 10) + 
+  labs(title = "Lung adenocarcinoma")
+
+lihc_attr_plot <- sources_of_variants(cesa_dataset_name = "lihc_cesa",
+                    cesa_attr = lihc_attr,selection_top = 11,
+                    prev_cutoff = 10) + 
+  labs(title = "Liver Hepatocellular Carcinoma")
+
+luad_attr_plot / lihc_attr_plot + plot_annotation(tag_levels = "A")
+
+ggsave(filename = "figures/fig2.png",width = 10,height = 6)
+
 
 
