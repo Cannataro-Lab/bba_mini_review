@@ -125,7 +125,8 @@ tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL,subs_t
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 90,hjust=1,vjust=0.5)) + 
     labs(y="Number of substitutions", x="Trinucleotide context") + 
-    theme(legend.position=c(.15,.95)) + 
+    # theme(legend.position=c(.15,.95)) +
+    theme(legend.position="none") +
     scale_fill_manual(values = color_vec_sbs) 
   
   

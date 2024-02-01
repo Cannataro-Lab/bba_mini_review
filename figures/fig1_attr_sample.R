@@ -71,8 +71,9 @@ fig1 <- tcga_to_bar_plot(dataset_name = "luad_cesa",
                          highlight_context = c(kras_g12c_trinuc_context),
                          subs_to_plot = c("C>A","C>T"))
 
+fig1b <- patchwork::wrap_plots(fig1$sbs_plots,ncol = 1)
 
-fig1$original_subs_plot + patchwork::wrap_plots(fig1$sbs_plots,ncol = 1) + fig1$attr_plot
+fig1$original_subs_plot + fig1b + fig1$attr_plot + plot_annotation(tag_levels = 'A')
 
 ggsave(filename = "figures/fig1.pdf",width = 15,height = 8)
 
