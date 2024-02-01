@@ -81,6 +81,26 @@ fig1$original_subs_plot + labs(tag = "A") +
   fig1$attr_plot + labs(tag = "C")
 
 ggsave(filename = "figures/fig1.pdf",width = 15,height = 8)
+ggsave(filename = "figures/fig1.png",width = 15,height = 8)
+
+luad_cesa$maf |> 
+  filter(Unique_Patient_Identifier == "TCGA-75-5126") |> 
+  filter(top_gene == "KRAS")
+
+
+luad_cesa$maf |> 
+  filter(Unique_Patient_Identifier == "TCGA-75-5126") |> 
+  left_join(luad_cesa$selection$selection.1, by = c("top_consequence" = "variant_name")) |> 
+  filter(!is.na(selection_intensity)) |> 
+  arrange(desc(selection_intensity))
+
+
+luad_cesa$maf |> 
+  filter(Unique_Patient_Identifier == "TCGA-75-5126") |> 
+  nrow()
 
 
 
+
+luad_cesa$selection$selection.1 |>  
+  filter(variant_name == "MTOR_R2266P")

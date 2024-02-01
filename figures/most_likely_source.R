@@ -5,14 +5,24 @@
 ## find set of variants, highest prevalence, highest effect 
 
 
+cesa_dataset_name <- "luad_cesa"
+cesa_attr <- luad_attr
 
 
 
-
-sources_of_variants <- function(cesa_dataset_name, cesa_attr, prev_cutoff = 10, selection_top = 10){
+sources_of_variants <- function(cesa_dataset_name, cesa_attr, 
+                                prev_cutoff = 10, 
+                                selection_top = 10){
   
   
   dataset <- get(cesa_dataset_name)
+  
+  ordered_data <- dataset$selection$selection.1 |>
+    arrange(desc(selection_intensity))
+  
+  ordered_data$variant_plot_name <- paste(stringr::str_split_i(string = ordered_data$variant_id,pattern = "_",i = 1),
+                                               stringr::str_split_i(string = ordered_data$variant_id,pattern = "_",i = 2))
+  
   
   dataset$selection$selection.1 |>
     arrange(desc(selection_intensity)) |> 
@@ -50,14 +60,22 @@ sources_of_variants <- function(cesa_dataset_name, cesa_attr, prev_cutoff = 10, 
       TRUE ~ "Other signatures"))
   
   
+  source_probs_long
+  
   source_probs_long$variant_plot_name <- paste(stringr::str_split_i(string = source_probs_long$variant_id,pattern = "_",i = 1),
                                                stringr::str_split_i(string = source_probs_long$variant_id,pattern = "_",i = 2))
   
-  
+  source_probs_long$variant_plot_name <- factor(source_probs_long$variant_plot_name,
+                                                levels = ordered_data$variant_plot_name)
   
   source_probs_long_summary <- source_probs_long |> 
     group_by(name, signature_process,variant_plot_name) |>  
     summarize(total_val = sum(value))
+  
+  
+  source_probs_long_summary$signature_process <- 
+    factor(source_probs_long_summary$signature_process,
+           levels = names(color_vec))
   
   # most likely source from each tumor
   source_probs_long_summary |> 
@@ -90,5 +108,10 @@ sources_of_variants(cesa_dataset_name = "blca_cesa",cesa_attr = blca_attr)
 
 
 sources_of_variants(cesa_dataset_name = "cesc_cesa",cesa_attr = cesc_attr)
+
+sources_of_variants(cesa_dataset_name = "thca_cesa",cesa_attr = thca_attr)
+
+
+sources_of_variants(cesa_dataset_name = "lihc_cesa",cesa_attr = lihc_attr)
 
 

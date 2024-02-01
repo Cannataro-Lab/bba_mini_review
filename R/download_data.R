@@ -9,5 +9,7 @@ cancereffectsizeR::get_TCGA_project_MAF(project = "CESC", filename = "output_dat
 cancereffectsizeR::get_TCGA_project_MAF(project = "BLCA", filename = "output_data/BLCA.maf")
 cancereffectsizeR::get_TCGA_project_MAF(project = "THCA",filename = "output_data/THCA.maf")
 cancereffectsizeR::get_TCGA_project_MAF(project = "LUAD", filename = "output_data/LUAD.maf")
+cancereffectsizeR::get_TCGA_project_MAF(project = "HNSC", filename = "output_data/HNSC.maf")
+cancereffectsizeR::get_TCGA_project_MAF(project = "LIHC", filename = "output_data/LIHC.maf")
 
 
