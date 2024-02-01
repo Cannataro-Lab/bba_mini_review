@@ -125,8 +125,17 @@ tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL,subs_t
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 90)) + 
     labs(y="Number of substitutions", x="Trinucleotide context") + 
-    theme(legend.position=c(.9,.75)) + 
+    theme(legend.position=c(.15,.95)) + 
     scale_fill_manual(values = color_vec_sbs) 
+  
+  
+  star_loc <-  attr_sigs_for_plot |> 
+    filter(Type %in% highlight_context) |> 
+    group_by(Type) |> 
+    summarize(summed_sig = sum(absolute_signature))
+  
+  attr_plot <- attr_plot + 
+    geom_text(data = star_loc, aes(x=Type,y=summed_sig),label = "*",size = 10)
   
   # percent each sig plots
   
@@ -161,7 +170,7 @@ tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL,subs_t
     geom_col(aes(x=Type, y=raw_signature), fill = color_vec_sbs[this_sbs]) +
     theme_bw() + 
     theme(axis.text.x = element_text(angle = 90)) + 
-    labs(y="Number of substitutions", x="Trinucleotide context",
+    labs(y="Proportion", x="Trinucleotide context",
          title = this_sbs,
          subtitle = paste("Proportion signature attributed:", round(this_prop,3)))+ 
     theme(legend.position="none") 
