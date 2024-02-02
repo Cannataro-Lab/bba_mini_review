@@ -1,5 +1,10 @@
 ## Main analysis script ----- 
 
+
+# installation instructions for the cancereffectsizeR
+# package are here: 
+# https://townsend-lab-yale.github.io/cancereffectsizeR/articles/cancereffectsizeR.html
+
 library(cancereffectsizeR)
 
 
