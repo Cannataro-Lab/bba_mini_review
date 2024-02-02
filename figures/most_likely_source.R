@@ -5,8 +5,8 @@
 ## find set of variants, highest prevalence, highest effect 
 
 
-cesa_dataset_name <- "luad_cesa"
-cesa_attr <- luad_attr
+# cesa_dataset_name <- "luad_cesa"
+# cesa_attr <- luad_attr
 
 
 
@@ -91,46 +91,4 @@ sources_of_variants <- function(cesa_dataset_name, cesa_attr,
   
   
 }
-
-
-
-sources_of_variants(cesa_dataset_name = "luad_cesa",cesa_attr = luad_attr) + 
-  labs(title = "LUAD")
-
-ggsave(filename = "figures/fig2_scratch.pdf",width = 10,height = 5)
-
-sources_of_variants(cesa_dataset_name = "lusc_cesa",cesa_attr = lusc_attr)
-
-
-
-
-sources_of_variants(cesa_dataset_name = "blca_cesa",cesa_attr = blca_attr)
-
-
-
-sources_of_variants(cesa_dataset_name = "cesc_cesa",cesa_attr = cesc_attr)
-
-sources_of_variants(cesa_dataset_name = "thca_cesa",cesa_attr = thca_attr)
-
-
-sources_of_variants(cesa_dataset_name = "lihc_cesa",cesa_attr = lihc_attr)
-
-
-
-
-luad_attr_plot <- sources_of_variants(cesa_dataset_name = "luad_cesa",
-                    cesa_attr = luad_attr,selection_top = 12,
-                    prev_cutoff = 10) + 
-  labs(title = "Lung adenocarcinoma")
-
-lihc_attr_plot <- sources_of_variants(cesa_dataset_name = "lihc_cesa",
-                    cesa_attr = lihc_attr,selection_top = 11,
-                    prev_cutoff = 10) + 
-  labs(title = "Liver Hepatocellular Carcinoma")
-
-luad_attr_plot / lihc_attr_plot + plot_annotation(tag_levels = "A")
-
-ggsave(filename = "figures/fig2.png",width = 10,height = 6)
-
-
 
