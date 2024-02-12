@@ -3,7 +3,7 @@
 # thanks https://colorbrewer2.org/ 
 
 
-test_colors <- tribble(
+test_colors <- dplyr::tribble(
   ~ object,                               ~ objects_color, 
   "KLF5 E419Q",                           "#377eb8",
   "OR2T34 L163L",                         "#4daf4a",
@@ -17,7 +17,7 @@ test_colors <- tribble(
   "Damage by reactive oxygen species (18)",    "#e41a1c",
   "Mutagenic chemical exposure (22,24,42,88)", "#66a61e",
   "Alcohol-associated (16)",                "#d95f02",
-  "Non-actionable and unknown signatures", "black"
+  "Other signatures", "black"
   
 )
 
@@ -45,7 +45,7 @@ color_vec <- setNames(nm= as.character(test_colors$object),object = as.character
 signatures <- cancereffectsizeR::get_ces_signature_set("ces.refset.hg38", "COSMIC_v3.2")
 signatures <- signatures$meta$Signature
 
-sig_tib <- tibble(signature = signatures) 
+sig_tib <- dplyr::tibble(signature = signatures) 
 
 
 sig_tib <- sig_tib  %>%
@@ -60,7 +60,7 @@ sig_tib <- sig_tib  %>%
     signature %in% c("SBS22","SBS24","SBS42","SBS88") ~ as.character(color_vec["Mutagenic chemical exposure (22,24,42,88)"]),
     signature %in% c("SBS16") ~ as.character(color_vec["Alcohol-associated (16)"]),
     signature == "SBS18" ~ as.character(color_vec["Damage by reactive oxygen species (18)"]),
-    TRUE ~ color_vec["Non-actionable and unknown signatures"]))
+    TRUE ~ color_vec["Other signatures"]))
 
 
 

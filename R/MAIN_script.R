@@ -7,6 +7,10 @@
 
 library(cancereffectsizeR)
 library(ces.refset.hg38)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
 
 
 # download the data ----- 
