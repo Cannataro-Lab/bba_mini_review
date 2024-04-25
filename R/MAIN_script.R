@@ -7,6 +7,7 @@
 
 library(cancereffectsizeR)
 library(ces.refset.hg38)
+library(dplyr)
 
 
 # download the data ----- 
@@ -18,7 +19,7 @@ library(ces.refset.hg38)
 # run cancereffectsizeR analysis on the data ---- 
 
 ## Only run if changes to data above, or changes to cesR pipeline
-# source("R/cesR_analyses.R")
+source("R/cesR_analyses.R")
 
 
 # load in cesR analyses ----
