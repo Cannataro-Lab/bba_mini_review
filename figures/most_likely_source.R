@@ -42,7 +42,7 @@ sources_of_variants <- function(cesa_dataset_name, cesa_attr,
     filter(value>0)
   
   
-  source_probs_long
+  # source_probs_long
   
   source_probs_long <- source_probs_long |> 
     mutate(signature = name) |> 
@@ -60,7 +60,7 @@ sources_of_variants <- function(cesa_dataset_name, cesa_attr,
       TRUE ~ "Other signatures"))
   
   
-  source_probs_long
+  # source_probs_long
   
   source_probs_long$variant_plot_name <- paste(stringr::str_split_i(string = source_probs_long$variant_id,pattern = "_",i = 1),
                                                stringr::str_split_i(string = source_probs_long$variant_id,pattern = "_",i = 2))
