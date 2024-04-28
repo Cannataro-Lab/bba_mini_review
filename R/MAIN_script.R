@@ -23,7 +23,7 @@ library(patchwork)
 # run cancereffectsizeR analysis on the data ---- 
 
 ## Only run if changes to data above, or changes to cesR pipeline
-source("R/cesR_analyses.R")
+# source("R/cesR_analyses.R")
 
 
 # load in cesR analyses ----

@@ -82,7 +82,7 @@ fig1$original_subs_plot + labs(tag = "A") +
 
 # ggsave(filename = "figures/fig1.pdf",width = 15,height = 8)
 ggsave(filename = "figures/fig1.png",width = 15,height = 8)
-ggsave(filename = "figures/fig1.eps",width = 15,height = 8)
+ggsave(filename = "figures/fig1.tif",width = 15,height = 8)
 
 
 

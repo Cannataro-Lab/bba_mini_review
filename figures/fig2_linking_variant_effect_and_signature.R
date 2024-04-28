@@ -20,6 +20,8 @@ lihc_attr_plot <- sources_of_variants(cesa_dataset_name = "lihc_cesa",
 luad_attr_plot / lihc_attr_plot + plot_annotation(tag_levels = "A")
 
 ggsave(filename = "figures/fig2.png",width = 10,height = 6)
+ggsave(filename = "figures/fig2.tif",width = 10,height = 6)
+
 
 
 

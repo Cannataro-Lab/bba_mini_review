@@ -7,10 +7,10 @@ tcga_to_bar_plot <- function(dataset_name, sample, highlight_context=NULL,subs_t
   
   dataset <- get(dataset_name)
   
-  trinuc_order <- colnames(ces.refset.hg38::ces.refset.hg38$signatures$COSMIC_v3.2$signatures)
+  trinuc_order <- colnames(ces.refset.hg38::ces.refset.hg38$signatures$previous_versions$COSMIC_v3.2$signatures)
   
   # signatures <- read.table("COSMIC_v3.4_SBS_GRCh37.txt", header = TRUE)
-  signatures <- ces.refset.hg38::ces.refset.hg38$signatures$COSMIC_v3.2$signatures
+  signatures <- ces.refset.hg38::ces.refset.hg38$signatures$previous_versions$COSMIC_v3.2$signatures
   signatures <- signatures |> mutate(Signatures = rownames(signatures))
   
   signatures_longer <- signatures %>%
